@@ -23,15 +23,46 @@ public class PlayerCrab : MonoBehaviour
 
     public void FixedUpdate()
     {
+        //回転。回転が実行された場合、移動は実行されない。
+        bool rotateIsDone = false;
+        {
+#if false
+            Vector3 rotVec = new Vector3(0, 0, 0);
+            rotVec.x += Input.GetAxis("RStick_X");
+            rotVec.z += Input.GetAxis("RStick_Y");
+            if(rotVec.sqrMagnitude > 0.1f)
+            {
+                rotateIsDone = true;
+                float dot = Vector3.Dot(transform.forward, rotVec.normalized);
+                dot = Mathf.Clamp(dot, -1, 1);
+                float angle = Mathf.Acos(dot);
+                Vector3 axis = Vector3.Cross(transform.forward, rotVec);
+                transform.Rotate(new Vector3(0, axis.y, 0), Mathf.Min(5, Mathf.Rad2Deg * angle));
+                Debug.Log(Mathf.Rad2Deg * angle);
+            }
+#else
+            float rot = (Input.GetButton("LButton") ? -5 : 0 ) + (Input.GetButton("RButton") ? 5 : 0);
+            if (Mathf.Abs(rot) > 0.1f)
+            {
+                transform.Rotate(new Vector3(0, 1, 0), rot);
+                rotateIsDone = true;
+            }
+#endif
+        }
+
         //歩行
         Vector3 moveVec;
         {
             //移動ベクトルを取得
             moveVec = new Vector3(0, 0, 0);
-            {
+            if(!rotateIsDone){
+                //横方向に動きを固定する
                 moveVec.x += Input.GetAxis("LStick_X") * moveSpeed;
                 moveVec.z += Input.GetAxis("LStick_Y") * moveSpeed;
-                Debug.Log(moveVec);
+                float length = moveVec.magnitude;
+                float dot = Vector3.Dot(moveVec, transform.right);
+                dot = (dot > 0) ? 1 : -1;
+                moveVec = transform.right * dot * length;
             }
 
             //Y軸方向を除いた現在の速度
@@ -44,8 +75,6 @@ public class PlayerCrab : MonoBehaviour
             if (moveVec.sqrMagnitude > 0.1f)
             {
                 xzVelocity += moveVec;
-                Debug.Log("debug");
-                Debug.Log("debug");
             }
 
             //減速。地面に足がついているときのみ。
@@ -70,16 +99,8 @@ public class PlayerCrab : MonoBehaviour
             _rigidbody.velocity = xzVelocity;
         }
 
-        //向きの回転
-        moveVec.y = 0;
-        if (moveVec.sqrMagnitude > 0.1f)
-        {
-            transform.LookAt(transform.position + moveVec, Vector3.up);
-        }
-
-
         //場外判定
-        if (transform.position.y < -100)
+        if (transform.position.y < -10)
         {
             UnityEngine.SceneManagement.SceneManager.LoadScene("GameScene");
         }
