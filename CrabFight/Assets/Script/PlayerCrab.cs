@@ -8,7 +8,6 @@ public class PlayerCrab : MonoBehaviour
     public float moveSpeed = 10.0f;
     public float brakeSpeed = 1.0f;
     public float maxSpeed = 10.0f;
-    public float jumpPower = 10.0f;
 
     //自分のコンポーネント
     private Rigidbody _rigidbody;
@@ -30,8 +29,8 @@ public class PlayerCrab : MonoBehaviour
             //移動ベクトルを取得
             moveVec = new Vector3(0, 0, 0);
             {
-                moveVec.x += Input.GetAxis("Horizontal") * moveSpeed;
-                moveVec.z += Input.GetAxis("Vertical") * moveSpeed;
+                moveVec.x += Input.GetAxis("LStick_X") * moveSpeed;
+                moveVec.z += Input.GetAxis("LStick_Y") * moveSpeed;
                 Debug.Log(moveVec);
             }
 
@@ -70,14 +69,6 @@ public class PlayerCrab : MonoBehaviour
             xzVelocity.y = _rigidbody.velocity.y;
             _rigidbody.velocity = xzVelocity;
         }
-        //ジャンプ
-        if (onGround)
-        {
-            if (Input.GetButton("Jump"))
-            {
-                _rigidbody.velocity = new Vector3(0, jumpPower, 0);
-            }
-        }
 
         //向きの回転
         moveVec.y = 0;
@@ -90,7 +81,7 @@ public class PlayerCrab : MonoBehaviour
         //場外判定
         if (transform.position.y < -100)
         {
-            UnityEngine.SceneManagement.SceneManager.LoadScene("Stage1");
+            UnityEngine.SceneManagement.SceneManager.LoadScene("GameScene");
         }
     }
 }
