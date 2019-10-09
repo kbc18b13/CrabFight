@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class KaniGenerator : MonoBehaviour {
-    private static int KaniKazu = 2;
+    private static int KaniKazu = 4;
 
     public static void SetKaniKazu(int kazu)
     {
@@ -20,7 +20,7 @@ public class KaniGenerator : MonoBehaviour {
         }
         for (int i = 0; i < KaniKazu; i++)
         {
-            GameObject kani = (GameObject)Resources.Load("kani Variant");
+            GameObject kaniPre = (GameObject)Resources.Load("kani Variant");
 
             pos = kakudo * pos;
 
@@ -29,7 +29,8 @@ public class KaniGenerator : MonoBehaviour {
             vec.y = 0;
             rot.SetLookRotation(vec);
 
-            Instantiate(kani, pos, rot);
+            GameObject kani = Instantiate(kaniPre, pos, rot);
+            kani.GetComponent<PlayerCrab>().SetPadNum(i);
         }
 
         Destroy(gameObject);

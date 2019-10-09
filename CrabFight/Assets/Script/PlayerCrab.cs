@@ -11,20 +11,174 @@ public class PlayerCrab : MonoBehaviour
 
     //自分のコンポーネント
     private Rigidbody _rigidbody;
+    private BoxCollider hasamiBox;
 
     //内部パラメーター
+    public int padNum = 0;
     private bool onGround = true;
+    private float grabbedTimer = 0.0f;//捕まれている残り時間
+    public int asiCount = 8;       //足の数。ヒットポイントと似ている。
+    float grabbingTime = 0.0f;//つかんでいる時間
+
+    private PlayerCrab grabbedKani = null;//自分がつかんでいるカニ
+    private PlayerCrab grabbingKani = null;//自分をつかんでいるカニ
+
+
+    enum Action {
+        None,
+        Cut,
+        Grab,
+        Guard
+    }
+
+    //ハサミとアクションのクラス
+    class Hasami {
+        private Action act = Action.None;
+        private float actionTime = 0;
+        private BoxCollider hasamiBox;
+
+        //コンストラクタ
+        public Hasami(BoxCollider col)
+        {
+            hasamiBox = col;
+        }
+
+        public Action GetAct()
+        {
+            return act;
+        }
+
+        //アクション実行
+        public void doAct(Action a)
+        {
+            act = a;
+            actionTime = 0.3f;
+            hasamiBox.enabled = true;
+        }
+
+        //毎Updateごとに呼ぶ
+        public void Update()
+        {
+            actionTime -= Time.fixedDeltaTime;
+            if (actionTime < 0)
+            {
+                hasamiBox.enabled = false;
+            }
+        }
+
+        //OnTriggerStayで呼ぶ
+        public void TriggerStay(Collider col, PlayerCrab crab)
+        {
+            if (col.tag == "Kani")
+            {
+                switch (act)
+                {
+                    case Action.Cut:
+                        col.GetComponent<PlayerCrab>().CutLeg();
+                        act = Action.None;
+                        hasamiBox.enabled = false;
+                        break;
+
+                    case Action.Grab:
+                        crab.grabbedKani = col.GetComponent<PlayerCrab>();
+                        crab.grabbedKani.BeGrabbed(crab);
+                        crab.grabbingTime = 0;
+                        act = Action.None;
+                        hasamiBox.enabled = false;
+                        break;
+                }
+            }
+        }
+
+    }
+    Hasami hasami;
+
+
+    //全カニ共通のカニカウンター
+    static private int KaniCount = 0;
+
+
+    //パッドナンバーを指定、カニジェネレーターから呼ばれる
+    public void SetPadNum(int num)
+    {
+        padNum = num;
+    }
+
+    //足を切り落とされる
+    public void CutLeg()
+    {
+        if(asiCount != 0)
+        {
+            asiCount--;
+        }
+    }
+
+    //捕まれる。
+    public void BeGrabbed(PlayerCrab grapper)
+    {
+        grabbedTimer = 3.0f;
+        grabbingKani = grapper;
+        _rigidbody.isKinematic = true;
+    }
+
+    //解放する
+    public void Release()
+    {
+        grabbedKani = null;
+    }
+
+    //解放される
+    public void BeReleased()
+    {
+        grabbedTimer = 0.0f;
+        grabbingKani = null;
+        _rigidbody.isKinematic = false;
+    }
+
+    public void Awake()
+    {
+        KaniCount++;
+    }
 
     public void Start()
     {
         //各種コンポーネントを変数に格納
         _rigidbody = GetComponent<Rigidbody>();
+        hasami = new Hasami(GetComponents<BoxCollider>()[1]);
     }
 
     public void FixedUpdate()
     {
+        //場外判定
+        if (transform.position.y < -10)
+        {
+            Destroy(gameObject);
+            KaniCount--;
+            if (KaniCount == 0)
+            {
+                UnityEngine.SceneManagement.SceneManager.LoadScene("GameScene");
+            }
+        }
+
+        //もし捕まれ中なら
+        if (grabbedTimer > 0)
+        {
+            //捕まれタイマーを減らす。
+            grabbedTimer -= Time.fixedDeltaTime;
+            if (grabbedTimer < 0)
+            {
+                grabbingKani.Release();
+                grabbedTimer = 0.0f;
+                grabbingKani = null;
+                _rigidbody.isKinematic = false; BeReleased();
+            }
+            return;
+        }
+
+
         //回転。回転が実行された場合、移動は実行されない。
         bool rotateIsDone = false;
+        float rot = 0;
         {
 #if false
             Vector3 rotVec = new Vector3(0, 0, 0);
@@ -41,7 +195,7 @@ public class PlayerCrab : MonoBehaviour
                 Debug.Log(Mathf.Rad2Deg * angle);
             }
 #else
-            float rot = (Input.GetButton("LButton") ? -5 : 0 ) + (Input.GetButton("RButton") ? 5 : 0);
+            rot = (Input.GetButton("LButton_" + padNum) ? -5 : 0 ) + (Input.GetButton("RButton_"+padNum) ? 5 : 0);
             if (Mathf.Abs(rot) > 0.1f)
             {
                 transform.Rotate(new Vector3(0, 1, 0), rot);
@@ -57,8 +211,8 @@ public class PlayerCrab : MonoBehaviour
             moveVec = new Vector3(0, 0, 0);
             if(!rotateIsDone){
                 //横方向に動きを固定する
-                moveVec.x += Input.GetAxis("LStick_X") * moveSpeed;
-                moveVec.z += Input.GetAxis("LStick_Y") * moveSpeed;
+                moveVec.x += Input.GetAxis("LStick_X_" + padNum) * moveSpeed;
+                moveVec.z += Input.GetAxis("LStick_Y_" + padNum) * moveSpeed;
                 float length = moveVec.magnitude;
                 float dot = Vector3.Dot(moveVec, transform.right);
                 dot = (dot > 0) ? 1 : -1;
@@ -69,7 +223,8 @@ public class PlayerCrab : MonoBehaviour
             Vector3 xzVelocity = new Vector3(_rigidbody.velocity.x, 0, _rigidbody.velocity.z);
 
             //最大速度。既に最大速度を超えているときは、何か外からの力が加わった結果なので放置。
-            float localMaxSpeed = Mathf.Max(xzVelocity.magnitude, maxSpeed);
+            //最大速度に足の数による減衰をかける
+            float localMaxSpeed = Mathf.Max(xzVelocity.magnitude, maxSpeed*(asiCount / 8.0f));
 
             //速度を加える
             if (moveVec.sqrMagnitude > 0.1f)
@@ -99,10 +254,50 @@ public class PlayerCrab : MonoBehaviour
             _rigidbody.velocity = xzVelocity;
         }
 
-        //場外判定
-        if (transform.position.y < -10)
+        //つかみ中
+        if (grabbedKani != null)
         {
-            UnityEngine.SceneManagement.SceneManager.LoadScene("GameScene");
+            grabbingTime += Time.fixedDeltaTime;
+            if(grabbingTime > 1)
+            {
+                grabbingTime = 1;
+            }
+
+            //つかんでいるカニの位置を設定
+            Vector3 pos = transform.position;
+            pos += transform.forward * 1.5f + transform.up * 1.2f;
+            grabbedKani.transform.position = Vector3.Lerp(grabbedKani.transform.position, pos, grabbingTime);
+            grabbedKani.transform.Rotate(new Vector3(0, 1, 0), rot);
+
+            //離す
+            if (Input.GetButtonDown("B_" + padNum))
+            {
+                grabbedKani._rigidbody.velocity += transform.forward * 15;
+                grabbedKani.BeReleased();
+                grabbedKani = null;
+            }
         }
+        else
+        {
+
+            //切断
+            if (Input.GetButtonDown("X_" + padNum))
+            {
+                hasami.doAct(Action.Cut);
+            }
+
+            //つかみ
+            if (Input.GetButtonDown("B_" + padNum))
+            {
+                hasami.doAct(Action.Grab);
+            }
+        }
+        //ハサミのアップデート
+        hasami.Update();
+    }
+
+    public void OnTriggerStay(Collider c)
+    {
+        hasami.TriggerStay(c, this);
     }
 }
