@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerCrab : MonoBehaviour
-{
+public class PlayerCrab : MonoBehaviour {
     //事前設定パラメーター
     public float moveSpeed = 10.0f;
     public float brakeSpeed = 1.0f;
@@ -12,6 +11,7 @@ public class PlayerCrab : MonoBehaviour
     //自分のコンポーネント
     private Rigidbody _rigidbody;
     private BoxCollider hasamiBox;
+    private Animator animator;
 
     //内部パラメーター
     public int padNum = 0;
@@ -34,13 +34,29 @@ public class PlayerCrab : MonoBehaviour
     //ハサミとアクションのクラス
     class Hasami {
         private Action act = Action.None;
+        private const float c_actionTime = 0.2f;
         private float actionTime = 0;
+        private float actionWait = 0;
         private BoxCollider hasamiBox;
 
         //コンストラクタ
         public Hasami(BoxCollider col)
         {
             hasamiBox = col;
+        }
+
+        public bool GrabCancel() {
+            if(act == Action.Grab)
+            {
+                act = Action.None;
+                actionTime = 0;
+                actionWait = 0;
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         public Action GetAct()
@@ -51,18 +67,41 @@ public class PlayerCrab : MonoBehaviour
         //アクション実行
         public void doAct(Action a)
         {
-            act = a;
-            actionTime = 0.3f;
-            hasamiBox.enabled = true;
+            if (actionWait + actionTime <= 0)
+            {
+                act = a;
+                switch (a)
+                {
+                    case Action.Cut:
+                        actionWait = 0.1f;
+                        break;
+                    case Action.Grab:
+                        actionWait = 0.5f;
+                        break;
+                }
+                actionTime = c_actionTime;
+            }
         }
 
         //毎Updateごとに呼ぶ
         public void Update()
         {
-            actionTime -= Time.fixedDeltaTime;
-            if (actionTime < 0)
+            actionWait -= Time.fixedDeltaTime;
+            if (actionWait < 0)
             {
-                hasamiBox.enabled = false;
+                if (actionTime == c_actionTime)
+                {
+                    hasamiBox.enabled = true;
+                }
+
+                if (actionTime > 0)
+                {
+                    actionTime -= Time.fixedDeltaTime;
+                }
+                else
+                {
+                    hasamiBox.enabled = false;
+                }
             }
         }
 
@@ -74,9 +113,15 @@ public class PlayerCrab : MonoBehaviour
                 switch (act)
                 {
                     case Action.Cut:
-                        col.GetComponent<PlayerCrab>().CutLeg();
-                        act = Action.None;
-                        hasamiBox.enabled = false;
+                        if (col.GetComponent<PlayerCrab>().CutLeg())
+                        {
+                            act = Action.None;
+                            hasamiBox.enabled = false;
+                        }
+                        else
+                        {
+                            crab._rigidbody.velocity = crab.transform.forward * -20;
+                        }
                         break;
 
                     case Action.Grab:
@@ -96,20 +141,54 @@ public class PlayerCrab : MonoBehaviour
 
     //全カニ共通のカニカウンター
     static private int KaniCount = 0;
-
+    static public int GetKaniCount()
+    {
+        return KaniCount;
+    }
 
     //パッドナンバーを指定、カニジェネレーターから呼ばれる
     public void SetPadNum(int num)
     {
         padNum = num;
+        Renderer[] renders = GetComponentsInChildren<Renderer>();
+        foreach (Renderer r in renders)
+        {
+            if (r.material.name == "KaniRed (Instance)")
+            {
+                switch (num)
+                {
+                    case 1:
+                        r.material.color = new Vector4(0.3f, 0.3f, 1, 1);
+                        break;
+                    case 2:
+                        r.material.color = new Vector4(0.3f, 1, 0.3f, 1);
+                        break;
+                    case 3:
+                        r.material.color = new Vector4(1, 1, 0.3f, 1);
+                        break;
+                }
+            }
+        }
     }
 
     //足を切り落とされる
-    public void CutLeg()
+    public bool CutLeg()
     {
-        if(asiCount != 0)
+        if (!animator.GetBool("Guard"))
         {
-            asiCount--;
+            if (hasami.GrabCancel())
+            {
+                animator.Play("Idle", 1);
+            }
+            if (asiCount != 0)
+            {
+                asiCount--;
+            }
+            return true;
+        }
+        else
+        {
+            return false;
         }
     }
 
@@ -145,6 +224,7 @@ public class PlayerCrab : MonoBehaviour
         //各種コンポーネントを変数に格納
         _rigidbody = GetComponent<Rigidbody>();
         hasami = new Hasami(GetComponents<BoxCollider>()[1]);
+        animator = GetComponent<Animator>();
     }
 
     public void FixedUpdate()
@@ -153,11 +233,7 @@ public class PlayerCrab : MonoBehaviour
         if (transform.position.y < -10)
         {
             Destroy(gameObject);
-            KaniCount--;
-            if (KaniCount == 0)
-            {
-                UnityEngine.SceneManagement.SceneManager.LoadScene("GameScene");
-            }
+            GameObject.Find("GameManager").GetComponent<GameManager>().Death(padNum);
         }
 
         //もし捕まれ中なら
@@ -195,7 +271,7 @@ public class PlayerCrab : MonoBehaviour
                 Debug.Log(Mathf.Rad2Deg * angle);
             }
 #else
-            rot = (Input.GetButton("LButton_" + padNum) ? -5 : 0 ) + (Input.GetButton("RButton_"+padNum) ? 5 : 0);
+            rot = (Input.GetButton("LButton_" + padNum) ? -5 : 0) + (Input.GetButton("RButton_" + padNum) ? 5 : 0);
             if (Mathf.Abs(rot) > 0.1f)
             {
                 transform.Rotate(new Vector3(0, 1, 0), rot);
@@ -209,7 +285,8 @@ public class PlayerCrab : MonoBehaviour
         {
             //移動ベクトルを取得
             moveVec = new Vector3(0, 0, 0);
-            if(!rotateIsDone){
+            if (!rotateIsDone)
+            {
                 //横方向に動きを固定する
                 moveVec.x += Input.GetAxis("LStick_X_" + padNum) * moveSpeed;
                 moveVec.z += Input.GetAxis("LStick_Y_" + padNum) * moveSpeed;
@@ -224,12 +301,17 @@ public class PlayerCrab : MonoBehaviour
 
             //最大速度。既に最大速度を超えているときは、何か外からの力が加わった結果なので放置。
             //最大速度に足の数による減衰をかける
-            float localMaxSpeed = Mathf.Max(xzVelocity.magnitude, maxSpeed*(asiCount / 8.0f));
+            float localMaxSpeed = Mathf.Max(xzVelocity.magnitude, maxSpeed * (asiCount / 8.0f));
 
             //速度を加える
             if (moveVec.sqrMagnitude > 0.1f)
             {
                 xzVelocity += moveVec;
+                animator.SetBool("Walk", true);
+            }
+            else
+            {
+                animator.SetBool("Walk", false);
             }
 
             //減速。地面に足がついているときのみ。
@@ -254,11 +336,12 @@ public class PlayerCrab : MonoBehaviour
             _rigidbody.velocity = xzVelocity;
         }
 
+        animator.SetBool("Grabbing", grabbedKani != null);
         //つかみ中
         if (grabbedKani != null)
         {
             grabbingTime += Time.fixedDeltaTime;
-            if(grabbingTime > 1)
+            if (grabbingTime > 1)
             {
                 grabbingTime = 1;
             }
@@ -279,17 +362,27 @@ public class PlayerCrab : MonoBehaviour
         }
         else
         {
-
-            //切断
-            if (Input.GetButtonDown("X_" + padNum))
+            if (Input.GetButton("A_" + padNum))
             {
-                hasami.doAct(Action.Cut);
+                animator.SetBool("Guard", true); transform.Rotate(new Vector3(0, 1, 0), rot);
             }
-
-            //つかみ
-            if (Input.GetButtonDown("B_" + padNum))
+            else
             {
-                hasami.doAct(Action.Grab);
+                animator.SetBool("Guard", false);
+
+                //切断
+                if (Input.GetButtonDown("X_" + padNum))
+                {
+                    hasami.doAct(Action.Cut);
+                    animator.SetTrigger("Slash");
+                }
+                else
+                //つかみ
+                if (Input.GetButtonDown("B_" + padNum))
+                {
+                    hasami.doAct(Action.Grab);
+                    animator.SetTrigger("Grab");
+                }
             }
         }
         //ハサミのアップデート
