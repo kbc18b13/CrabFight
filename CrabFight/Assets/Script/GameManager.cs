@@ -13,7 +13,6 @@ public class GameManager : MonoBehaviour
         nextGrade++;
         if (nextGrade == PlayerCrab.GetKaniCount()-1)
         {
-            
             UnityEngine.SceneManagement.SceneManager.LoadScene("ResultScene");
         }
     }
