@@ -42,7 +42,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1.0107598, y: 0.23619431, z: 0.53626525}
   m_Center: {x: -0.005737072, y: 0.005245579, z: 0.41087124}
---- !u!114 &1902659341
+--- !u!114 &464213071771979214
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -76,6 +76,11 @@ PrefabInstance:
       propertyPath: m_TagString
       value: Kani
       objectReference: {fileID: 0}
+    - target: {fileID: -6057140222963153312, guid: f97bab5538c41524aad950a04c1f87d7,
+        type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: d03ec16c91c5aed41876039e27840143, type: 2}
     - target: {fileID: -4216859302048453862, guid: f97bab5538c41524aad950a04c1f87d7,
         type: 3}
       propertyPath: m_LocalPosition.x
