@@ -1,0 +1,133 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!319 &31900000
+AvatarMask:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: KaniMask
+  m_Mask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+  m_Elements:
+  - m_Path: 
+    m_Weight: 1
+  - m_Path: 2
+    m_Weight: 0
+  - m_Path: 003
+    m_Weight: 0
+  - m_Path: 004
+    m_Weight: 0
+  - m_Path: 005
+    m_Weight: 0
+  - m_Path: 006
+    m_Weight: 0
+  - m_Path: 007
+    m_Weight: 0
+  - m_Path: 008
+    m_Weight: 0
+  - m_Path: 009
+    m_Weight: 0
+  - m_Path: body
+    m_Weight: 0
+  - m_Path: Box001
+    m_Weight: 0
+  - m_Path: Box002
+    m_Weight: 0
+  - m_Path: Box003
+    m_Weight: 0
+  - m_Path: Box004
+    m_Weight: 0
+  - m_Path: Box005
+    m_Weight: 0
+  - m_Path: Box006
+    m_Weight: 0
+  - m_Path: Box007
+    m_Weight: 0
+  - m_Path: Box008
+    m_Weight: 0
+  - m_Path: Box009
+    m_Weight: 0
+  - m_Path: Box010
+    m_Weight: 0
+  - m_Path: Box011
+    m_Weight: 0
+  - m_Path: Box012
+    m_Weight: 0
+  - m_Path: Box013
+    m_Weight: 0
+  - m_Path: Box014
+    m_Weight: 0
+  - m_Path: Box015
+    m_Weight: 0
+  - m_Path: Box016
+    m_Weight: 0
+  - m_Path: Box017
+    m_Weight: 1
+  - m_Path: Box018
+    m_Weight: 1
+  - m_Path: Box019
+    m_Weight: 1
+  - m_Path: Box021
+    m_Weight: 1
+  - m_Path: Box022
+    m_Weight: 1
+  - m_Path: Box023
+    m_Weight: 1
+  - m_Path: Dummy001
+    m_Weight: 0
+  - m_Path: Dummy001/Dummy002
+    m_Weight: 0
+  - m_Path: Dummy001/Dummy002/Dummy002_end
+    m_Weight: 0
+  - m_Path: Dummy001/Dummy003
+    m_Weight: 0
+  - m_Path: Dummy001/Dummy003/Dummy003_end
+    m_Weight: 0
+  - m_Path: Dummy001/Dummy004
+    m_Weight: 0
+  - m_Path: Dummy001/Dummy004/Dummy004_end
+    m_Weight: 0
+  - m_Path: Dummy001/Dummy005
+    m_Weight: 0
+  - m_Path: Dummy001/Dummy005/Dummy005_end
+    m_Weight: 0
+  - m_Path: Dummy001/Dummy006
+    m_Weight: 0
+  - m_Path: Dummy001/Dummy006/Dummy006_end
+    m_Weight: 0
+  - m_Path: Dummy001/Dummy008
+    m_Weight: 1
+  - m_Path: Dummy001/Dummy008/Dummy008_end
+    m_Weight: 1
+  - m_Path: Dummy001/Dummy009
+    m_Weight: 0
+  - m_Path: Dummy001/Dummy009/Dummy009_end
+    m_Weight: 0
+  - m_Path: Dummy001/Dummy010
+    m_Weight: 0
+  - m_Path: Dummy001/Dummy010/Dummy010_end
+    m_Weight: 0
+  - m_Path: Dummy001/Dummy011
+    m_Weight: 0
+  - m_Path: Dummy001/Dummy011/Dummy011_end
+    m_Weight: 0
+  - m_Path: Dummy001/Dummy012
+    m_Weight: 0
+  - m_Path: Dummy001/Dummy012/Dummy012_end
+    m_Weight: 0
+  - m_Path: Dummy001/Dummy013
+    m_Weight: 1
+  - m_Path: Dummy001/Dummy013/Dummy013_end
+    m_Weight: 1
+  - m_Path: Dummy001/Dummy014
+    m_Weight: 1
+  - m_Path: Dummy001/Dummy014/Dummy014_end
+    m_Weight: 1
+  - m_Path: Dummy001/Dummy015
+    m_Weight: 1
+  - m_Path: Dummy001/Dummy015/Dummy015_end
+    m_Weight: 1
+  - m_Path: Sphere001
+    m_Weight: 0
+  - m_Path: Sphere002
+    m_Weight: 0
