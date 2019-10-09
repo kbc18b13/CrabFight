@@ -16,23 +16,27 @@ public class TitleScene : MonoBehaviour
         //sousabuttunのボタンオブジェクトの取得。
         sousa = GameObject.Find("/Canvas/sousa").GetComponent<Button>();
 
+        start.Select();
     }
 
     // Update is called once per frame
     void Update()
     {
 
-        if (Input.GetKeyDown(KeyCode.A))
-        {
-            //Aが押されたら非表示
-            start.enabled = false;
-        }
-        if (Input.GetKeyDown(KeyCode.B))
-        {
-            //Bが押されたら表示
-            start.enabled = true;
-        }
-            // SceneManager.LoadScene("Number");
+    }
 
-}
+    // startボタンが押された場合
+    public void StartClick()
+    {
+        //ゲーム開始
+        KaniGenerator.SetKaniKazu(2);
+        SceneManager.LoadScene("GameScene");
+    }
+    //sousaボタンが押された場合
+    public void SousaClick()
+    {
+        SceneManager.LoadScene("OperationScene");
+
+    }
+
 }
