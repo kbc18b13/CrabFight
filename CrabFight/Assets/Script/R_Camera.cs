@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.UI;
 public class R_Camera : MonoBehaviour
 {
     Vector3 move;
@@ -10,7 +10,7 @@ public class R_Camera : MonoBehaviour
     {
         
     }
-
+    
     // Update is called once per frame
     void Update()
     {
