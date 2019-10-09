@@ -5,11 +5,11 @@ using UnityEngine;
 public class Result : MonoBehaviour
 {
     public int MaxPlayerCount;      //プレイヤーの最大プレイ人数。
-    //ランキング。
-    static int First = 0;           //プレイヤーナンバーを入れる。
-    static int Second = 0;          //プレイヤーナンバーを入れる。
-    static int Third = 0;           //プレイヤーナンバーを入れる。
-    static int Fourth = 0;          //プレイヤーナンバーを入れる。
+                                    //ランキング。
+    public static int First = 0;           //プレイヤーナンバーを入れる。
+    public static int Second = 0;          //プレイヤーナンバーを入れる。
+    public static int Third = 0;           //プレイヤーナンバーを入れる。
+    public static int Fourth = 0;          //プレイヤーナンバーを入れる。
    
 
     PlayerCrab[] players;           //プレイヤー。
