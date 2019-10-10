@@ -299,7 +299,7 @@ public class PlayerCrab : MonoBehaviour {
             rot = (Input.GetButton("LButton_" + padNum) ? -5 : 0) + (Input.GetButton("RButton_" + padNum) ? 5 : 0);
             if (Mathf.Abs(rot) > 0.1f)
             {
-                transform.Rotate(new Vector3(0, 1, 0), rot);
+                transform.Rotate(new Vector3(0, 1, 0), rot * ((asiCount+1) / 9.0f));
                 rotateIsDone = true;
             }
         }
@@ -319,7 +319,7 @@ public class PlayerCrab : MonoBehaviour {
             Vector3 pos = transform.position;
             pos += transform.forward * 1.5f + transform.up * 1.2f;
             grabbedKani.transform.position = Vector3.Lerp(grabbedKani.transform.position, pos, grabbingTime);
-            grabbedKani.Rotate(new Vector3(0, 1, 0), rot);
+            grabbedKani.Rotate(new Vector3(0, 1, 0), rot * ((asiCount + 1) / 9.0f));
 
             //離す
             if (inGrab)
@@ -370,7 +370,7 @@ public class PlayerCrab : MonoBehaviour {
 
             //最大速度。既に最大速度を超えているときは、何か外からの力が加わった結果なので放置。
             //最大速度に足の数による減衰をかける
-            float localMaxSpeed = Mathf.Max(xzVelocity.magnitude, maxSpeed * (asiCount / 8.0f));
+            float localMaxSpeed = Mathf.Max(xzVelocity.magnitude, maxSpeed * ((asiCount + 1) / 9.0f));
 
             //速度を加える
             if (moveVec.sqrMagnitude > 0.1f)
