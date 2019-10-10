@@ -5,19 +5,29 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     int nextGrade = 0;
-    int[] junihyou = { 0, 0, 0, 0};
+    int[] junihyou = { 0, 0, 0};
+    int winnerNum = 0;
+
+    public void Awake()
+    {
+        nextGrade = PlayerCrab.GetKaniCount() - 2;
+        winnerNum = (PlayerCrab.GetKaniCount() - 1) * PlayerCrab.GetKaniCount() / 2;
+    }
 
     public void Death(int padNum)
     {
+        Debug.Log("落ちた" + padNum);
         junihyou[nextGrade] = padNum;
-        nextGrade++;
-        if (nextGrade == PlayerCrab.GetKaniCount()-1)
+        nextGrade--;
+        winnerNum -= padNum;
+        if (nextGrade == -1)
         {
-            Result.First = junihyou[3];
-            Result.Second = junihyou[2];
+            Result.First = winnerNum;
+            Result.Second = junihyou[0];
             Result.Third = junihyou[1];
-            Result.Fourth = junihyou[0];
+            Result.Fourth = junihyou[2];
             UnityEngine.SceneManagement.SceneManager.LoadScene("ResultScene");
+            Debug.Log(Result.First + "," + Result.Second + "," + Result.Third + "," + Result.Fourth);
         }
     }
 }
