@@ -13,7 +13,10 @@ public class GameManager : MonoBehaviour
         nextGrade++;
         if (nextGrade == PlayerCrab.GetKaniCount()-1)
         {
-            
+            Result.First = junihyou[0];
+            Result.Second = junihyou[1];
+            Result.Third = junihyou[2];
+            Result.Fourth = junihyou[3];
             UnityEngine.SceneManagement.SceneManager.LoadScene("ResultScene");
         }
     }
