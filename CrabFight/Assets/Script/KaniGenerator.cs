@@ -10,6 +10,11 @@ public class KaniGenerator : MonoBehaviour {
         KaniKazu = kazu;
     }
 
+    public static int GetKaniKazu()
+    {
+        return KaniKazu;
+    }
+
     void Awake()
     {
         Vector3 pos = new Vector3(0, 2.5f, 5.0f);
