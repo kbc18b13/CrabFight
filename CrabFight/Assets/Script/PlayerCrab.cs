@@ -165,14 +165,6 @@ public class PlayerCrab : MonoBehaviour {
     }
     Hasami hasami;
 
-
-    //全カニ共通のカニカウンター
-    static private int KaniCount = 0;
-    static public int GetKaniCount()
-    {
-        return KaniCount;
-    }
-
     public void Rotate(Vector3 axis, float angle)
     {
         transform.Rotate(axis, angle);
@@ -256,11 +248,6 @@ public class PlayerCrab : MonoBehaviour {
         grabbedTimer = 0.0f;
         grabbingKani = null;
         _rigidbody.isKinematic = false;
-    }
-
-    public void Awake()
-    {
-        KaniCount++;
     }
 
     public void Start()
