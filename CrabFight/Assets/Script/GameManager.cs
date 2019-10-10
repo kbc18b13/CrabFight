@@ -10,8 +10,10 @@ public class GameManager : MonoBehaviour
 
     public void Awake()
     {
-        nextGrade = PlayerCrab.GetKaniCount() - 2;
-        winnerNum = (PlayerCrab.GetKaniCount() - 1) * PlayerCrab.GetKaniCount() / 2;
+        nextGrade = KaniGenerator.GetKaniKazu() - 2;
+        winnerNum = (KaniGenerator.GetKaniKazu() - 1) * KaniGenerator.GetKaniKazu() / 2;
+        Debug.Log("ウィナー" + winnerNum);
+        Debug.Log("ネクスト" + nextGrade);
     }
 
     public void Death(int padNum)
