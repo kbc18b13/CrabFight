@@ -20,7 +20,9 @@ public class TitleScene : MonoBehaviour
 
     bool startCrick;
     bool playerselect;
-    bool kanimove;
+    bool kanimove = true;
+    bool move;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -41,31 +43,44 @@ public class TitleScene : MonoBehaviour
 // Update is called once per frame
 void Update()
     {
-        /*if (kanimove == false)
+
+        if (kanimove)
         {
-            if (kani1.localPosition.x < 7)
+            if (move == false && kani1.localPosition.x < 150 && kani2.localPosition.x > -150)
             {
-                kani1.localPosition += new Vector3(1, 0, 0);
+                kani1.localPosition += new Vector3((float)0.2f, 0, 0);
+                kani2.localPosition += new Vector3((float)-0.2f, 0, 0);
+                if (kani1.localPosition.x >= 150 && kani2.localPosition.x <= -150)
+                {
+                    move = true;
 
+                }
             }
-            else if(kani1.localPosition.x > -7)
+            else if (kani1.localPosition.x > -70 && move == true && kani2.localPosition.x < 70)
             {
-                kani1.localPosition += new Vector3(-1, 0, 0);
+                kani1.localPosition += new Vector3((float)-1.0f, 0, 0);
+                kani2.localPosition += new Vector3((float)1.0f, 0, 0);
+                if (kani1.localPosition.x < -70 && kani2.localPosition.x > -150)
+                {
+                    move = false;
 
+                }
             }
-        }*/
+
+
+        }
         if (startCrick)
         {
             if (title.localPosition.y < 500&& kani1.localPosition.y > -700 && kani2.localPosition.y > -700
-                && stage.localPosition.y > -600 && startbutton.localPosition.y > -200 && sousabutton.localPosition.y > -200)
+                && stage.localPosition.y > -600 && startbutton.localPosition.y > -300 && sousabutton.localPosition.y > -300)
             {
                 //背景以外全部消す
                 title.localPosition += new Vector3(0, 5, 0);
                 kani1.localPosition += new Vector3(0, -7, 0);
                 kani2.localPosition += new Vector3(0, -7, 0);
                 stage.localPosition += new Vector3(0, -6, 0);
-                startbutton.localPosition += new Vector3(0, -2, 0);
-                sousabutton.localPosition += new Vector3(0, -2, 0);
+                startbutton.localPosition += new Vector3(0, -3, 0);
+                sousabutton.localPosition += new Vector3(0, -3, 0);
 
             }
             else
@@ -97,7 +112,7 @@ void Update()
     public void StartClick()
     {
         startCrick = true;
-        kanimove = true;
+        kanimove = false;
     }
     //sousaボタンが押された場合
     public void SousaClick()
