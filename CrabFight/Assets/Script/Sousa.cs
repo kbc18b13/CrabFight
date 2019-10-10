@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 public class Sousa : MonoBehaviour
 {
@@ -14,7 +12,8 @@ public class Sousa : MonoBehaviour
     void Update()
     {
         //Bボタンが押されるとタイトルに戻る。
-        if(Input.GetButton("BButton")){
+        if(Input.GetKeyDown(KeyCode.A))
+        {
             SceneManager.LoadScene("ka");
         }
     }
