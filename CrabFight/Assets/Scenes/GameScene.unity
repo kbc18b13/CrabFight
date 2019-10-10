@@ -529,6 +529,31 @@ PrefabInstance:
       propertyPath: padNum
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4243321502191098952, guid: 4dd6c715ffe800a49bfd9e16953ff078,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3660894003806415299, guid: 4dd6c715ffe800a49bfd9e16953ff078,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9082996052570247123, guid: 4dd6c715ffe800a49bfd9e16953ff078,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8725220447663072819, guid: 4dd6c715ffe800a49bfd9e16953ff078,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6742953450547306239, guid: 4dd6c715ffe800a49bfd9e16953ff078,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4dd6c715ffe800a49bfd9e16953ff078, type: 3}
 --- !u!1 &1504277764
