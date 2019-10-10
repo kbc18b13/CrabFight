@@ -23,7 +23,7 @@ public class Result : MonoBehaviour
     {
 
         //プレイヤーの最大プレイ人数を取得。
-        MaxPlayerCount = 3;
+        MaxPlayerCount = 4;
 
         //プレイヤー取得。
         //players = new PlayerCrab[MaxPlayerCount]; //初期化。
@@ -56,9 +56,10 @@ public class Result : MonoBehaviour
             //四位。
             if (MaxPlayerCount == 4)
             {
-                position = new Vector3(0.0f, 0.0f, -2.0f);
+                position = new Vector3(-4.0f, 2.0f, 4.0f);
                 Kani4 = (GameObject)Resources.Load("kani Variant");
-                Kani4 = Instantiate(Kani3, position, rot);
+                rot = Quaternion.Euler(0, -45.0f, 0);//そっぽ向かせる。
+                Kani4 = Instantiate(Kani4, position, rot);
                 Kani4.GetComponent<PlayerCrab>().SetPadNum(Fourth);
 
             }

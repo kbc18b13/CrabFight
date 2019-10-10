@@ -11,10 +11,11 @@ public class Sousa : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //Bボタンが押されるとタイトルに戻る。
-        if(Input.GetKeyDown(KeyCode.A))
-        {
-            SceneManager.LoadScene("ka");
-        }
     }
+    public void backClick()
+    {
+        SceneManager.LoadScene("ka");
+
+    }
+
 }
