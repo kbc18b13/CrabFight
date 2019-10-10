@@ -56,10 +56,11 @@ public class Result : MonoBehaviour
             //四位。
             if (MaxPlayerCount == 4)
             {
-                //position = new Vector3(0.0f, 0.0f, -2.0f);
-                //Kani4 = (GameObject)Resources.Load("kani Variant");
-                //Kani4 = Instantiate(Kani4, position, rot);
-                //Kani4.GetComponent<PlayerCrab>().SetPadNum(Fourth);
+                position = new Vector3(-4.0f, 2.0f, 4.0f);
+                Kani4 = (GameObject)Resources.Load("kani Variant");
+                rot = Quaternion.Euler(0, -45.0f, 0);//そっぽ向かせる。
+                Kani4 = Instantiate(Kani4, position, rot);
+                Kani4.GetComponent<PlayerCrab>().SetPadNum(Fourth);
 
             }
 
