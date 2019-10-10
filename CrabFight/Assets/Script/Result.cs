@@ -18,12 +18,15 @@ public class Result : MonoBehaviour
     GameObject Kani3;
     GameObject Kani4;
 
+    bool Agein = true;
+    bool Taitoru = false;
+    KaniGenerator kanigene;
     // Start is called before the first frame update
     void Start()
     {
 
         //プレイヤーの最大プレイ人数を取得。
-        MaxPlayerCount = 4;
+        MaxPlayerCount = KaniGenerator.GetKaniKazu();
 
         //プレイヤー取得。
         //players = new PlayerCrab[MaxPlayerCount]; //初期化。
@@ -80,13 +83,22 @@ public class Result : MonoBehaviour
             Kani1.transform.position = position;
         }
 
-        //
-        if (Input.GetButtonDown("B_" + First))
+        //ボタン選択
+        if (Input.GetButtonDown("B_" + First)
+            && Agein == true )
+        {
+            SceneManager.LoadScene("GameScene");
+        }
+        if (Input.GetButtonDown("B_" + First)
+            && Taitoru == true)
         {
             SceneManager.LoadScene("ka");
         }
 
-        
+        //if (Input.GetButtonDown("Horizontal" + First))
+        //{
+          
+        //}
 
     }
 }
