@@ -16,7 +16,7 @@ public class GameManager : MonoBehaviour
 
     public void Death(int padNum)
     {
-        Debug.Log("落ちた" + padNum);
+        //Debug.Log("落ちた" + padNum);
         junihyou[nextGrade] = padNum;
         nextGrade--;
         winnerNum -= padNum;
@@ -27,7 +27,7 @@ public class GameManager : MonoBehaviour
             Result.Third = junihyou[1];
             Result.Fourth = junihyou[2];
             UnityEngine.SceneManagement.SceneManager.LoadScene("ResultScene");
-            Debug.Log(Result.First + "," + Result.Second + "," + Result.Third + "," + Result.Fourth);
+            //Debug.Log(Result.First + "," + Result.Second + "," + Result.Third + "," + Result.Fourth);
         }
     }
 }

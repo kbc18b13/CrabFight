@@ -20,6 +20,11 @@ public class PlayerCrab : MonoBehaviour {
     public int asiCount = 8;       //足の数。ヒットポイントと似ている。
     float grabbingTime = 0.0f;//つかんでいる時間
 
+    //入力パラメーター
+    private bool inGrab = false;
+    private bool inSlash = false;
+
+
     private PlayerCrab grabbedKani = null;//自分がつかんでいるカニ
     private PlayerCrab grabbingKani = null;//自分をつかんでいるカニ
 
@@ -47,8 +52,10 @@ public class PlayerCrab : MonoBehaviour {
 
         public void Release()
         {
+            act = Action.None;
             hasamiBox.enabled = false;
             actionTime = 0.0f;
+            actionWait = 0.0f;
         }
 
         public bool GrabCancel() {
@@ -131,9 +138,23 @@ public class PlayerCrab : MonoBehaviour {
                         break;
 
                     case Action.Grab:
-                        crab.grabbedKani = col.GetComponent<PlayerCrab>();
-                        crab.grabbedKani.BeGrabbed(crab);
-                        crab.grabbingTime = 0;
+                        PlayerCrab other = col.GetComponent<PlayerCrab>();
+                        if (other.grabbedKani == crab)
+                        {
+                            other.Release();
+                            crab.grabbedTimer = 0.0f;
+                            crab.grabbingKani = null;
+                            crab._rigidbody.isKinematic = false;
+                            crab.BeReleased();
+                            other._rigidbody.velocity += crab.transform.forward * 10;
+                            crab._rigidbody.velocity += other.transform.forward * 10;
+                        }
+                        else
+                        {
+                            other.BeGrabbed(crab);
+                            crab.grabbedKani = other;
+                            crab.grabbingTime = 0;
+                        }
                         act = Action.None;
                         hasamiBox.enabled = false;
                         break;
@@ -250,6 +271,12 @@ public class PlayerCrab : MonoBehaviour {
         animator = GetComponent<Animator>();
     }
 
+    public void Update()
+    {
+        inSlash = inSlash || Input.GetButtonDown("X_" + padNum);
+        inGrab = inGrab || Input.GetButtonDown("B_" + padNum);
+    }
+
     public void FixedUpdate()
     {
         //場外判定
@@ -277,6 +304,7 @@ public class PlayerCrab : MonoBehaviour {
 
         animator.SetBool("Grabbing", grabbedKani != null);
         //つかみ中
+        bool nowRelease = false;
         if (grabbedKani != null)
         {
             grabbingTime += Time.fixedDeltaTime;
@@ -292,13 +320,14 @@ public class PlayerCrab : MonoBehaviour {
             grabbedKani.Rotate(new Vector3(0, 1, 0), rot);
 
             //離す
-            if (Input.GetButtonDown("B_" + padNum))
+            if (inGrab)
             {
                 grabbedKani._rigidbody.velocity += transform.forward * 15;
                 grabbedKani.BeReleased();
                 hasami.Release();
                 
                 grabbedKani = null;
+                nowRelease = true;
             }
         }
 
@@ -375,31 +404,33 @@ public class PlayerCrab : MonoBehaviour {
         }
         
         //つかみ中でない場合だけ
-        if (grabbedKani == null)
+        if (grabbedKani == null && nowRelease == false)
         {
             if (Input.GetButton("A_" + padNum))
             {
-                animator.SetBool("Guard", true); transform.Rotate(new Vector3(0, 1, 0), rot);
+                animator.SetBool("Guard", true);
             }
             else
             {
                 animator.SetBool("Guard", false);
 
                 //切断
-                if (Input.GetButtonDown("X_" + padNum))
+                if (inSlash)
                 {
                     hasami.doAct(Action.Cut);
                     animator.SetTrigger("Slash");
                 }
                 else
                 //つかみ
-                if (Input.GetButtonDown("B_" + padNum))
+                if (inGrab)
                 {
                     hasami.doAct(Action.Grab);
                     animator.SetTrigger("Grab");
                 }
             }
         }
+        inSlash = false;
+        inGrab = false;
     }
 
     public void OnTriggerStay(Collider c)
