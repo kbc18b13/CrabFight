@@ -82,7 +82,24 @@ public class Result : MonoBehaviour
         {
             Kani1.transform.position = position;
         }
-
+        if (Kani2.transform.position.y < -5)
+        {
+            Kani2.transform.position = position;
+        }
+        if (MaxPlayerCount >= 3)
+        {
+            if (Kani3.transform.position.y < -5)
+            {
+                Kani3.transform.position = position;
+            }
+            if (MaxPlayerCount == 4)
+            {
+                if (Kani4.transform.position.y < -5)
+                {
+                    Kani4.transform.position = position;
+                }
+            }
+        }
         //ボタン選択
         if (Input.GetButtonDown("B_" + First)
             && Agein == true )
