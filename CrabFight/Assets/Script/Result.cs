@@ -23,7 +23,7 @@ public class Result : MonoBehaviour
     {
 
         //プレイヤーの最大プレイ人数を取得。
-        MaxPlayerCount = 3;
+        MaxPlayerCount = 4;
 
         //プレイヤー取得。
         //players = new PlayerCrab[MaxPlayerCount]; //初期化。
