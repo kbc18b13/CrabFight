@@ -15,7 +15,7 @@ public class R_Camera : MonoBehaviour
     void Update()
     {
         //カメラをＸ軸上回転しながら一位のところへ移動。
-        if (this.transform.position.x <= -0.1f)
+        if (this.transform.position.x >= 0.1f)
         {
             //回転軸オブジェクト。
             Transform target;
@@ -30,7 +30,7 @@ public class R_Camera : MonoBehaviour
         if (this.transform .position.y >= 4.0f)
         {
             //移動処理。
-            move = new Vector3(0.0f, 0.05f, 0.0f);
+            move = new Vector3(0.0f, 0.07f, 0.0f);
             this.transform.position -= move;
         }
 
