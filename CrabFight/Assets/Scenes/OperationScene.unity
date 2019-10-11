@@ -409,6 +409,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a003c4f2bd1368340baaa319879c8b0f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  modor: {fileID: 0}
 --- !u!114 &878736483
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -501,6 +502,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a003c4f2bd1368340baaa319879c8b0f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  modor: {fileID: 0}
 --- !u!114 &902866828
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -523,7 +525,7 @@ MonoBehaviour:
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_PressedColor: {r: 0.5, g: 0.19103774, b: 0.19103774, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
@@ -544,17 +546,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 902866827}
-        m_MethodName: backClick
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
       - m_Target: {fileID: 2016228202}
         m_MethodName: PlayOneShot
         m_Mode: 2
@@ -562,6 +553,17 @@ MonoBehaviour:
           m_ObjectArgument: {fileID: 8300000, guid: 07c834d11178d5645b6ed8e3d00513d3,
             type: 3}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.AudioClip, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 902866827}
+        m_MethodName: SousaClick
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -884,6 +886,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2016228203}
   - component: {fileID: 2016228202}
+  - component: {fileID: 2016228204}
   m_Layer: 0
   m_Name: Audio Source
   m_TagString: Untagged
@@ -1001,3 +1004,16 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2016228204
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2016228201}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a003c4f2bd1368340baaa319879c8b0f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  modor: {fileID: 8300000, guid: 07c834d11178d5645b6ed8e3d00513d3, type: 3}
