@@ -6,7 +6,7 @@ using UnityEngine.UI;//ＵＩコンポーネント使用。
 public class Result : MonoBehaviour
 {
     public int MaxPlayerCount;      //プレイヤーの最大プレイ人数。
-                                    //ランキング。
+    //ランキング。
     public static int First = 0;           //プレイヤーナンバーを入れる。
     public static int Second = 0;          //プレイヤーナンバーを入れる。
     public static int Third = 0;           //プレイヤーナンバーを入れる。
@@ -19,12 +19,17 @@ public class Result : MonoBehaviour
     GameObject Kani3;
     GameObject Kani4;
 
+    //ボタン判定
     bool Agein = true;
     bool Taitoru = false;
     KaniGenerator kanigene;
-
     Button button1;
     Button button2;
+
+    //音;
+    public AudioClip kettei;
+    public AudioClip sentak;
+    private AudioSource sound;
 
     // Start is called before the first frame update
     void Start()
@@ -85,6 +90,8 @@ public class Result : MonoBehaviour
         Selectable sel = GetComponent<Selectable>();
         button1.Select();
 
+        //oto
+        sound = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -116,21 +123,24 @@ public class Result : MonoBehaviour
             }
         }
         //ボタン選択
-        //B決定判定
-        if (Input.GetButtonDown("B_" + First)
+        //A決定判定
+        if (Input.GetButtonDown("A_" + First)
             && Agein == true )
         {
+            sound.PlayOneShot(kettei);
             SceneManager.LoadScene("GameScene");
         }
-        if (Input.GetButtonDown("B_" + First)
+        if (Input.GetButtonDown("A_" + First)
             && Taitoru == true)
         {
+            sound.PlayOneShot(kettei);
             SceneManager.LoadScene("ka");
         }
         //十字キー右左判定　セレクト状態
         if (Input.GetAxis("Horizontal") >=0.5f 
             && Agein == true)
         {
+            sound.PlayOneShot(sentak);
             Agein = false;
             Taitoru = true;
             button1.Select();
@@ -139,6 +149,7 @@ public class Result : MonoBehaviour
         if (Input.GetAxis("Horizontal") <= -0.5f 
             && Taitoru == true)
         {
+            sound.PlayOneShot(sentak);
             Agein = true;
             Taitoru = false;
             button2.Select();
@@ -155,8 +166,7 @@ public class Result : MonoBehaviour
             button2.Select();
             Debug.Log("2");
         }
-
-
-
+        
+        
     }
 }
