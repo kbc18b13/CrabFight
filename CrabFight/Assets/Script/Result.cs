@@ -29,7 +29,11 @@ public class Result : MonoBehaviour
     //音;
     public AudioClip kettei;
     public AudioClip sentak;
+    public AudioClip hulan;
     private AudioSource sound;
+
+    //タイマー
+    public int timer = 0;
 
     // Start is called before the first frame update
     void Start()
@@ -56,7 +60,7 @@ public class Result : MonoBehaviour
         Kani1.GetComponent<PlayerCrab>().SetPadNum(First);
 
         //二位。
-        position = new Vector3(2.0f, 1.5f, 0.0f);
+        position = new Vector3(-2.0f, 2.0f, 0.0f);
         Kani2 = (GameObject)Resources.Load("kani Variant");
         Kani2 = Instantiate(Kani2, position, rot);
         Kani2.GetComponent<PlayerCrab>().SetPadNum(Second);
@@ -64,7 +68,7 @@ public class Result : MonoBehaviour
         //三位。
         if (MaxPlayerCount >= 3)
         {
-            position = new Vector3(-2.0f, 1.5f, 0.0f);
+            position = new Vector3(2.0f, 2.0f, 0.0f);
             Kani3 = (GameObject)Resources.Load("kani Variant");
             Kani3 = Instantiate(Kani3, position, rot);
             Kani3.GetComponent<PlayerCrab>().SetPadNum(Third);
@@ -166,7 +170,12 @@ public class Result : MonoBehaviour
             button2.Select();
             Debug.Log("2");
         }
-        
-        
+
+        //tai-ma-hulannhula-re
+        timer += 1;
+        if(timer == 40)
+        {
+            sound.PlayOneShot(hulan);
+        }
     }
 }
