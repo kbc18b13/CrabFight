@@ -22,6 +22,13 @@ public class TitleScene : MonoBehaviour
     bool playerselect;
     bool kanimove = true;
     bool move;
+    bool seni1;
+    bool seni2;
+    bool seni3 = false;
+
+    private int timer1 = 0;
+    private int timer2 = 0;
+    private int timer3 = 0;
 
     // Start is called before the first frame update
     void Start()
@@ -32,18 +39,16 @@ public class TitleScene : MonoBehaviour
         stage = GameObject.Find("/Canvas/stage").GetComponent<RectTransform>();
         startbutton = GameObject.Find("/Canvas/start").GetComponent<RectTransform>();
         sousabutton = GameObject.Find("/Canvas/sousa").GetComponent<RectTransform>();
-
         playersele = GameObject.Find("/Canvas/plselect").GetComponent<RectTransform>();
         player2 = GameObject.Find("/Canvas/player2").GetComponent<RectTransform>();
         player3 = GameObject.Find("/Canvas/player3").GetComponent<RectTransform>();
         player4 = GameObject.Find("/Canvas/player4").GetComponent<RectTransform>();
-
     }
 
 // Update is called once per frame
 void Update()
     {
-
+        //カニの左右移動
         if (kanimove)
         {
             if (move == false && kani1.localPosition.x < 150 && kani2.localPosition.x > -150)
@@ -69,12 +74,12 @@ void Update()
 
 
         }
+        //背景以外全部消す
         if (startCrick)
         {
             if (title.localPosition.y < 500&& kani1.localPosition.y > -700 && kani2.localPosition.y > -700
                 && stage.localPosition.y > -600 && startbutton.localPosition.y > -300 && sousabutton.localPosition.y > -300)
             {
-                //背景以外全部消す
                 title.localPosition += new Vector3(0, 5, 0);
                 kani1.localPosition += new Vector3(0, -7, 0);
                 kani2.localPosition += new Vector3(0, -7, 0);
@@ -89,9 +94,10 @@ void Update()
                 playerselect = true;
             }
         }
+        //人数選択画面の表示
         if (playerselect)
         {
-            if (playersele.localPosition.y > -10 && player2.localPosition.y < -50 && player3.localPosition.y < -50 && player4.localPosition.y < -50)
+            if (playersele.localPosition.y > 0 && player2.localPosition.y < -50 && player3.localPosition.y < -50 && player4.localPosition.y < -50)
             {
                 //人数選択画面の表示
                 playersele.localPosition += new Vector3(0, -2, 0);
@@ -106,6 +112,41 @@ void Update()
             }
 
         }
+        //ゲーム開始
+        //二人プレイ 
+        if (seni1 == true)
+        {
+            timer1++;
+            if (timer1 > 35)
+            {
+                KaniGenerator.SetKaniKazu(2);
+                SceneManager.LoadScene("GameScene");
+            }
+
+        }
+        //三人プレイ 
+        if (seni2 == true)
+        {
+            timer2++;
+            if (timer2 > 35)
+            {
+                KaniGenerator.SetKaniKazu(3);
+                SceneManager.LoadScene("GameScene");
+            }
+
+        }
+        //四人プレイ 
+        if (seni3 == true)
+        {
+            timer3++;
+            if (timer3 > 35)
+            {
+                KaniGenerator.SetKaniKazu(4);
+                SceneManager.LoadScene("GameScene");
+            }
+
+        }
+
     }
 
     // startボタンが押された場合
@@ -117,28 +158,23 @@ void Update()
     //sousaボタンが押された場合
     public void SousaClick()
     {
+        //操作画面に切り替え
         SceneManager.LoadScene("OperationScene");
     }
     public void Pl2Click()
     {
-        //ゲーム開始
-        KaniGenerator.SetKaniKazu(2);
-        SceneManager.LoadScene("GameScene");
-
+        //二人プレイ用
+        seni1 = true;
     }
     public void Pl3Click()
     {
-        //ゲーム開始
-        KaniGenerator.SetKaniKazu(3);
-        SceneManager.LoadScene("GameScene");
-
+        //三人プレイ用
+        seni2 = true;
     }
     public void Pl4Click()
     {
-        //ゲーム開始
-        KaniGenerator.SetKaniKazu(4);
-        SceneManager.LoadScene("GameScene");
-
+        //四人プレイ用
+        seni3 = true;
     }
 
 }
