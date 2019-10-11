@@ -10,13 +10,13 @@ public class R_Button : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //ボタンコンポーネントの取得。
-        button1 = GameObject.Find("Canvas/Button1").GetComponent<Button>();
-        button2 = GameObject.Find("Canvas/Button2").GetComponent<Button>();
+        ////ボタンコンポーネントの取得。
+        //button1 = GameObject.Find("Canvas/Button1").GetComponent<Button>();
+        //button2 = GameObject.Find("Canvas/Button2").GetComponent<Button>();
 
-        //最初に選択状態にしたいボタンの設定。
-        Selectable sel = GetComponent<Selectable>();
-        button1.Select();
+        ////最初に選択状態にしたいボタンの設定。
+        //Selectable sel = GetComponent<Selectable>();
+        //button1.Select();
    
         
     }

@@ -131,7 +131,6 @@ GameObject:
   - component: {fileID: 52695627}
   - component: {fileID: 52695629}
   - component: {fileID: 52695628}
-  - component: {fileID: 52695630}
   m_Layer: 5
   m_Name: Sousa
   m_TagString: Untagged
@@ -194,18 +193,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 52695626}
   m_CullTransparentMesh: 0
---- !u!114 &52695630
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 52695626}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a003c4f2bd1368340baaa319879c8b0f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &115657041
 GameObject:
   m_ObjectHideFlags: 0

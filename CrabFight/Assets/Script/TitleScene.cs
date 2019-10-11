@@ -30,6 +30,13 @@ public class TitleScene : MonoBehaviour
     private int timer2 = 0;
     private int timer3 = 0;
 
+    //ボタン
+    private Button stbutton;
+    private Button sobutton;
+    private Button pl2button;
+    private Button pl3button;
+    private Button pl4button;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -43,10 +50,20 @@ public class TitleScene : MonoBehaviour
         player2 = GameObject.Find("/Canvas/player2").GetComponent<RectTransform>();
         player3 = GameObject.Find("/Canvas/player3").GetComponent<RectTransform>();
         player4 = GameObject.Find("/Canvas/player4").GetComponent<RectTransform>();
+
+        stbutton = GameObject.Find("/Canvas/start").GetComponent<Button>();
+        sobutton = GameObject.Find("/Canvas/sousa").GetComponent<Button>();
+        pl2button = GameObject.Find("/Canvas/player2").GetComponent<Button>();
+        pl3button = GameObject.Find("/Canvas/player3").GetComponent<Button>();
+        pl4button = GameObject.Find("/Canvas/player4").GetComponent<Button>();
+        stbutton.Select();
+        pl2button.enabled = false;
+        pl3button.enabled = false;
+        pl4button.enabled = false;
     }
 
-// Update is called once per frame
-void Update()
+    // Update is called once per frame
+    void Update()
     {
         //カニの左右移動
         if (kanimove)
@@ -108,43 +125,52 @@ void Update()
             }
             else
             {
+                stbutton.enabled = false;
+                sobutton.enabled = false;
+                pl2button.enabled = true;
+                pl3button.enabled = true;
+                pl4button.enabled = true;
                 playerselect = false;
+                pl2button.Select();
             }
 
         }
         //ゲーム開始
-        //二人プレイ 
-        if (seni1 == true)
+        if (playerselect == false)
         {
-            timer1++;
-            if (timer1 > 35)
+            //二人プレイ 
+            if (seni1 == true)
             {
-                KaniGenerator.SetKaniKazu(2);
-                SceneManager.LoadScene("GameScene");
-            }
+                timer1++;
+                if (timer1 > 35)
+                {
+                    KaniGenerator.SetKaniKazu(2);
+                    SceneManager.LoadScene("GameScene");
+                }
 
-        }
-        //三人プレイ 
-        if (seni2 == true)
-        {
-            timer2++;
-            if (timer2 > 35)
+            }
+            //三人プレイ 
+            if (seni2 == true)
             {
-                KaniGenerator.SetKaniKazu(3);
-                SceneManager.LoadScene("GameScene");
-            }
+                timer2++;
+                if (timer2 > 35)
+                {
+                    KaniGenerator.SetKaniKazu(3);
+                    SceneManager.LoadScene("GameScene");
+                }
 
-        }
-        //四人プレイ 
-        if (seni3 == true)
-        {
-            timer3++;
-            if (timer3 > 35)
+            }
+            //四人プレイ 
+            if (seni3 == true)
             {
-                KaniGenerator.SetKaniKazu(4);
-                SceneManager.LoadScene("GameScene");
-            }
+                timer3++;
+                if (timer3 > 35)
+                {
+                    KaniGenerator.SetKaniKazu(4);
+                    SceneManager.LoadScene("GameScene");
+                }
 
+            }
         }
 
     }
@@ -164,17 +190,26 @@ void Update()
     public void Pl2Click()
     {
         //二人プレイ用
-        seni1 = true;
+        if (playerselect == false)
+        {
+            seni1 = true;
+        }
     }
     public void Pl3Click()
     {
         //三人プレイ用
-        seni2 = true;
+        if (playerselect == false)
+        {
+            seni2 = true;
+        }
     }
     public void Pl4Click()
     {
         //四人プレイ用
-        seni3 = true;
+        if (playerselect == false)
+        {
+            seni3 = true;
+        }
     }
 
 }
