@@ -300,6 +300,9 @@ public class PlayerCrab : MonoBehaviour {
             v.x = 0; v.z = 0;
             _rigidbody.velocity = v;
             _audio.PlayOneShot(soundFall);
+            GameObject go = Resources.Load<GameObject>("fallEffect");
+            Quaternion r = Quaternion.Euler(-90, 0, 0);
+            Instantiate(go, transform.position, r);
             Destroy(this);
             GameObject.Find("GameManager").GetComponent<GameManager>().Death(padNum);
         }
