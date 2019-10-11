@@ -12,8 +12,6 @@ public class GameManager : MonoBehaviour
     {
         nextGrade = KaniGenerator.GetKaniKazu() - 2;
         winnerNum = (KaniGenerator.GetKaniKazu() - 1) * KaniGenerator.GetKaniKazu() / 2;
-        Debug.Log("ウィナー" + winnerNum);
-        Debug.Log("ネクスト" + nextGrade);
     }
 
     public void Death(int padNum)

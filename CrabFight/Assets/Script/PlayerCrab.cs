@@ -8,16 +8,25 @@ public class PlayerCrab : MonoBehaviour {
     public float brakeSpeed = 1.0f;
     public float maxSpeed = 10.0f;
 
+    public AudioClip soundCut;
+    public AudioClip soundGuard;
+    public AudioClip soundGrab;
+    public AudioClip soundFall;
+    public AudioClip soundWalk;
+    public AudioClip soundThrow;
+
     //自分のコンポーネント
     private Rigidbody _rigidbody;
     private BoxCollider hasamiBox;
     private Animator animator;
+    private AudioSource _audio;
 
     //内部パラメーター
-    public int padNum = 0;
+    private float walkSoundTimer = 0.0f;
+    private int padNum = 0;
     private bool onGround = true;
     private float grabbedTimer = 0.0f;//捕まれている残り時間
-    public int asiCount = 8;       //足の数。ヒットポイントと似ている。
+    private int asiCount = 8;       //足の数。ヒットポイントと似ている。
     float grabbingTime = 0.0f;//つかんでいる時間
 
     //入力パラメーター
@@ -155,6 +164,7 @@ public class PlayerCrab : MonoBehaviour {
                             other.BeGrabbed(crab);
                             crab.grabbedKani = other;
                             crab.grabbingTime = 0;
+                            crab._audio.PlayOneShot(crab.soundGrab);
                         }
                         act = Action.None;
                         hasamiBox.enabled = false;
@@ -239,6 +249,7 @@ public class PlayerCrab : MonoBehaviour {
         }
         else
         {
+            _audio.PlayOneShot(soundGuard);
             return false;
         }
     }
@@ -271,6 +282,7 @@ public class PlayerCrab : MonoBehaviour {
         _rigidbody = GetComponent<Rigidbody>();
         hasami = new Hasami(GetComponents<BoxCollider>()[1]);
         animator = GetComponent<Animator>();
+        _audio = GetComponent<AudioSource>();
     }
 
     public void Update()
@@ -287,6 +299,7 @@ public class PlayerCrab : MonoBehaviour {
             Vector3 v = _rigidbody.velocity;
             v.x = 0; v.z = 0;
             _rigidbody.velocity = v;
+            _audio.PlayOneShot(soundFall);
             Destroy(this);
             GameObject.Find("GameManager").GetComponent<GameManager>().Death(padNum);
         }
@@ -330,7 +343,7 @@ public class PlayerCrab : MonoBehaviour {
                 grabbedKani._rigidbody.velocity += transform.forward * 15;
                 grabbedKani.BeReleased();
                 hasami.Release();
-
+                _audio.PlayOneShot(soundThrow);
                 grabbedKani = null;
                 nowRelease = true;
             }
@@ -380,6 +393,16 @@ public class PlayerCrab : MonoBehaviour {
             {
                 xzVelocity += moveVec;
                 animator.SetBool("Walk", true);
+
+                if (walkSoundTimer <= 0)
+                {
+                    _audio.PlayOneShot(soundWalk);
+                    walkSoundTimer = 0.15f;
+                }
+                else
+                {
+                    walkSoundTimer -= Time.fixedDeltaTime;
+                }
             }
             else
             {
@@ -422,6 +445,7 @@ public class PlayerCrab : MonoBehaviour {
                 //切断
                 if (inSlash)
                 {
+                    _audio.PlayOneShot(soundCut);
                     hasami.doAct(Action.Cut);
                     animator.SetTrigger("Slash");
                 }
