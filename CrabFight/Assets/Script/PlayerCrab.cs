@@ -282,9 +282,12 @@ public class PlayerCrab : MonoBehaviour {
     public void FixedUpdate()
     {
         //場外判定
-        if (transform.position.y < -10)
+        if (transform.position.y < -1)
         {
-            Destroy(gameObject);
+            Vector3 v = _rigidbody.velocity;
+            v.x = 0; v.z = 0;
+            _rigidbody.velocity = v;
+            Destroy(this);
             GameObject.Find("GameManager").GetComponent<GameManager>().Death(padNum);
         }
 
