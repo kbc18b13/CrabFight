@@ -26,7 +26,6 @@ public class KaniGenerator : MonoBehaviour {
         for (int i = 0; i < KaniKazu; i++)
         {
             GameObject kaniPre = (GameObject)Resources.Load("kani Variant");
-
             pos = kakudo * pos;
 
             Quaternion rot = new Quaternion();
@@ -37,7 +36,6 @@ public class KaniGenerator : MonoBehaviour {
             GameObject kani = Instantiate(kaniPre, pos, rot);
             kani.GetComponent<PlayerCrab>().SetPadNum(i);
         }
-
         Destroy(gameObject);
     }
 }
