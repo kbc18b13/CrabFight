@@ -58,8 +58,9 @@ public class PlayerCrab : MonoBehaviour {
             actionWait = 0.0f;
         }
 
-        public bool GrabCancel() {
-            if(act == Action.Grab)
+        public bool GrabCancel()
+        {
+            if (act == Action.Grab)
             {
                 act = Action.None;
                 actionTime = 0;
@@ -181,19 +182,22 @@ public class PlayerCrab : MonoBehaviour {
         Renderer[] renders = GetComponentsInChildren<Renderer>();
         foreach (Renderer r in renders)
         {
-            if (r.material.name == "KaniRed (Instance)")
+            foreach (Material m in r.materials)
             {
-                switch (num)
+                if (m.name == "KaniRed (Instance)")
                 {
-                    case 1:
-                        r.material.color = new Vector4(0.3f, 0.3f, 1, 1);
-                        break;
-                    case 2:
-                        r.material.color = new Vector4(0.3f, 1, 0.3f, 1);
-                        break;
-                    case 3:
-                        r.material.color = new Vector4(1, 1, 0.3f, 1);
-                        break;
+                    switch (num)
+                    {
+                        case 1:
+                            m.color = new Vector4(0.3f, 0.3f, 1, 1);
+                            break;
+                        case 2:
+                            m.color = new Vector4(0.3f, 1, 0.3f, 1);
+                            break;
+                        case 3:
+                            m.color = new Vector4(1, 1, 0.3f, 1);
+                            break;
+                    }
                 }
             }
         }
@@ -210,14 +214,25 @@ public class PlayerCrab : MonoBehaviour {
             }
             if (asiCount != 0)
             {
-                //足を切り離す
-                int legNum = asiCount + 2;
-                if(legNum >= 7)
-                {
-                    legNum += 2;
-                }
-                string legName = string.Format("Dummy0{0:00}", legNum);
-                transform.Find("Dummy001").Find(legName).parent = null;
+                Transform asi = transform.Find("Leg" + (asiCount - 1));
+                asi.parent = null;//親子関係を断って
+
+                GameObject gmo = asi.gameObject;
+
+                SkinnedMeshRenderer skin = gmo.GetComponent<SkinnedMeshRenderer>();
+                skin.enabled = false;//スキンメッシュレンダーを無効化
+
+                MeshFilter filter = gmo.AddComponent<MeshFilter>();
+                filter.mesh = skin.sharedMesh;//メッシュフィルターを作成
+
+                MeshRenderer renderer = gmo.AddComponent<MeshRenderer>();
+                renderer.materials = skin.materials;//メッシュレンダーにマテリアルを設定
+
+
+                asi.GetChild(0).gameObject.SetActive(true);//コライダーを有効化(コライダ担当の子供を有効化)
+
+                gmo.GetComponent<Rigidbody>().isKinematic = false;//キネマティック解除
+
                 asiCount--;
             }
             return true;
@@ -279,12 +294,12 @@ public class PlayerCrab : MonoBehaviour {
         //回転。回転が実行された場合、移動は実行されない。
         bool rotateIsDone = false;
         float rot = 0;
-        if(grabbedTimer <= 0)
+        if (grabbedTimer <= 0)
         {
             rot = (Input.GetButton("LButton_" + padNum) ? -5 : 0) + (Input.GetButton("RButton_" + padNum) ? 5 : 0);
             if (Mathf.Abs(rot) > 0.1f)
             {
-                transform.Rotate(new Vector3(0, 1, 0), rot);
+                transform.Rotate(new Vector3(0, 1, 0), rot * ((asiCount+1) / 9.0f));
                 rotateIsDone = true;
             }
         }
@@ -304,7 +319,7 @@ public class PlayerCrab : MonoBehaviour {
             Vector3 pos = transform.position;
             pos += transform.forward * 1.5f + transform.up * 1.2f;
             grabbedKani.transform.position = Vector3.Lerp(grabbedKani.transform.position, pos, grabbingTime);
-            grabbedKani.Rotate(new Vector3(0, 1, 0), rot);
+            grabbedKani.Rotate(new Vector3(0, 1, 0), rot * ((asiCount + 1) / 9.0f));
 
             //離す
             if (inGrab)
@@ -312,7 +327,7 @@ public class PlayerCrab : MonoBehaviour {
                 grabbedKani._rigidbody.velocity += transform.forward * 15;
                 grabbedKani.BeReleased();
                 hasami.Release();
-                
+
                 grabbedKani = null;
                 nowRelease = true;
             }
@@ -355,7 +370,7 @@ public class PlayerCrab : MonoBehaviour {
 
             //最大速度。既に最大速度を超えているときは、何か外からの力が加わった結果なので放置。
             //最大速度に足の数による減衰をかける
-            float localMaxSpeed = Mathf.Max(xzVelocity.magnitude, maxSpeed * (asiCount / 8.0f));
+            float localMaxSpeed = Mathf.Max(xzVelocity.magnitude, maxSpeed * ((asiCount + 1) / 9.0f));
 
             //速度を加える
             if (moveVec.sqrMagnitude > 0.1f)
@@ -389,7 +404,7 @@ public class PlayerCrab : MonoBehaviour {
             xzVelocity.y = _rigidbody.velocity.y;
             _rigidbody.velocity = xzVelocity;
         }
-        
+
         //つかみ中でない場合だけ
         if (grabbedKani == null && nowRelease == false)
         {
