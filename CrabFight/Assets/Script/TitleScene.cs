@@ -65,6 +65,22 @@ public class TitleScene : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        {
+            float hori = Input.GetAxis("Horizontal");
+            if (hori < -0.5f && UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject == null)
+            {
+                UnityEngine.EventSystems.EventSystem.current.SetSelectedGameObject(
+                    pl2button.enabled ? pl2button.gameObject : stbutton.gameObject
+                );
+            }
+            else if(hori > 0.5f && UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject == null)
+            {
+                UnityEngine.EventSystems.EventSystem.current.SetSelectedGameObject(
+                    pl4button.enabled ? pl4button.gameObject : sobutton.gameObject
+                );
+            }
+        }
+
         //カニの左右移動
         if (kanimove)
         {
